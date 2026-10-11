@@ -16,13 +16,14 @@ status: draft
 # Papel
 
 - Transporte (SFU): encaminha mídia sem recomprimir, resolve NAT e cuida da reconexão.
-- Roda na máquina de um dos hosts. No modelo-alvo, é gerido como **sidecar** pelo app.
+- Roda na máquina de um dos hosts, iniciado pelo app como **processo filho** (binário `livekit-server`, cross-platform).
 - Emite os tokens JWT escopados à sala. O segredo do servidor fica somente na máquina do host.
+- Os participantes conectam pelo **SDK Rust do LiveKit** (crate `livekit`), informando a chave da sala.
 - Fica no host standby durante a redundância, para que os convidados não caiam se o diretor ativo falhar.
 
 # Execução no MVP
 
-Decisão do responsável: no MVP, o LiveKit roda **local via Docker**, por enquanto. Ver D3 em [Decisões](/decisoes.md).
+No MVP, o LiveKit roda **local** (via Docker por enquanto). O alvo é empacotar o binário `livekit-server` como processo filho. Ver D5 em [Decisões](/decisoes.md).
 
 # Relationships
 

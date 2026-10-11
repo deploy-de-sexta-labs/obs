@@ -1,8 +1,8 @@
 ---
 type: Roadmap Phase
-title: "Fase 1 — MVP (1 convidado remoto)"
-description: "Primeiro entregável: app Tauri instalável com host, 1 convidado remoto, overlay, mixer básico e multistream 3× com reconexão por plataforma."
-tags: [roadmap, fase-1, mvp]
+title: "Fase 1 — MVP (1 convidado remoto, Windows e Linux)"
+description: "Primeiro entregável: app Rust nativo em Windows e Linux, com 1 convidado remoto, overlays nativos e multistream 3× com reconexão por plataforma."
+tags: [roadmap, fase-1, mvp, rust, cross-platform]
 sources:
   - id: sessao-planejamento
     resource: "Sessão de planejamento com o responsável pelo produto (2026-10)"
@@ -14,23 +14,25 @@ status: draft
 
 # Entregas
 
-- App Tauri instalável (Windows).
-- Host com câmera, mic e tela. **1 convidado** via LiveKit (sidecar + TURN). Sala por chave.
-- Cena com host + convidado.
-- Overlay de logo e texto. Mixer de áudio básico.
-- Multistream 3× via MediaMTX + FFmpeg copy, com reconexão por plataforma.
+- App **Rust nativo** para **Windows e Linux**.
+- UI 100% Rust (Slint ou egui/iced).
+- Captura nativa de câmera, mic e tela; composição em `wgpu`; overlays nativos (logo e texto); mixer de áudio básico.
+- **1 convidado** via SDK Rust do LiveKit; sala por chave.
+- Multistream 3× via MediaMTX + FFmpeg copy, com **reconexão por plataforma**.
 - Painel com status e bitrate por plataforma; botão "Ao vivo".
-- i18n PT-BR + EN. Stream keys no keychain.
+- i18n PT-BR + EN. Stream keys no keyring.
 
 # Dependências
 
-- Resultado do [spike de via de saída](/pendencias/spike-via-de-saida.md), feito na [Fase 0](/roadmap/fase-0-spike.md).
+- Resultado dos spikes de [captura nativa](/pendencias/spike-captura-nativa.md) e [encode](/pendencias/decisao-encode.md), feitos na [Fase 0](/roadmap/fase-0-spike.md).
+- Escolha do toolkit de UI (D2 em [Decisões](/decisoes.md)).
 - Alcance dos convidados definido após o [teste de CGNAT](/pendencias/teste-de-cgnat.md).
-- Servidor de mídia no MVP: LiveKit via Docker (D3 em [Decisões](/decisoes.md)).
+- Servidor de mídia no MVP: LiveKit local (D5 em [Decisões](/decisoes.md)).
 
 # Relationships
 
 - [Visão geral](/visao-geral.md) — resultado esperado do MVP.
 - [Pipeline de mídia](/arquitetura/pipeline-de-midia.md) — fluxo a implementar.
+- [Captura e composição](/componentes/captura-e-composicao.md) — núcleo a construir.
 - [Infraestrutura de transporte](/arquitetura/infraestrutura-de-transporte.md) — alcance dos convidados.
-- [Decisões](/decisoes.md) — D8 define o escopo com 1 convidado.
+- [Decisões](/decisoes.md) — D11 define o escopo com 1 convidado.

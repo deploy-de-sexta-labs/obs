@@ -2,11 +2,13 @@
 
 > Estúdio de transmissão instalável, com **multistream nativo** (Twitch, YouTube e Kick), **convidados remotos via WebRTC** (estilo Discord) e **overlays**.
 
-Aplicativo desktop pensado para o fluxo do podcast **Deploy de Sexta**, inspirado no OBS Studio, mas com três diferenciais tratados como capacidades de primeira classe desde o início:
+Aplicativo desktop **nativo em Rust** pensado para o fluxo do podcast **Deploy de Sexta**, inspirado no OBS Studio, mas com três diferenciais tratados como capacidades de primeira classe desde o início:
 
 1. **Multistream nativo** — uma captura, enviada simultaneamente para Twitch, YouTube e Kick.
 2. **Convidados remotos** — participantes entram por uma sala WebRTC, com isolamento por chave de sala.
 3. **Overlays** — camadas visuais (logo, texto e afins) sobre o vídeo.
+
+Roda em **Windows e Linux**, sem Electron e sem webview.
 
 ## Status
 
@@ -14,15 +16,16 @@ Aplicativo desktop pensado para o fluxo do podcast **Deploy de Sexta**, inspirad
 
 ## Arquitetura (resumo)
 
-Como há convidados, a composição acontece no webview (canvas + overlays HTML/CSS). O programa é encodado uma única vez e distribuído para as três plataformas com reconexão independente por destino.
+A captura e a composição são nativas em Rust. A cena é composta em GPU (`wgpu`), encodada uma única vez e distribuída para as três plataformas com reconexão independente por destino.
 
 ```
-WebView2 (canvas): host cam + guest cam + overlays + mix de áudio
-        │  (a cena composta é publicada como 1 track WebRTC na sala LiveKit local)
+Núcleo de mídia (Rust)
+ ├ Captura: câmera, tela e áudio (nativo por sistema operacional)
+ └ Convidados: tracks WebRTC via SDK Rust do LiveKit
         ▼
-livekit-server (sidecar)  ──►  saída do programa
+Composição (wgpu): layout + overlays + mix de áudio
         ▼
-encode 1× (GPU: NVENC/QSV/AMF, fallback libx264)
+encode 1× (GPU: NVENC/QSV; VAAPI no Linux, AMF no Windows; fallback libx264)
         ▼
 MediaMTX local (rtmp://localhost/live)
         ├─ FFmpeg copy ─► Twitch    (reconnect próprio)
@@ -38,23 +41,24 @@ MediaMTX local (rtmp://localhost/live)
 
 | Camada | Escolha |
 |---|---|
-| Shell | Tauri v2 (Rust) |
-| Frontend | React + TypeScript + Tailwind |
-| Webview | WebView2 (Windows) |
-| Sidecars | `ffmpeg`, `mediamtx`, `livekit-server` |
-| SDK de mídia | `livekit-client` |
-| Empacotamento | Tauri bundler (Windows primeiro) |
-| i18n | i18next (PT-BR e EN) |
-| Segredos | keychain do SO |
+| Linguagem | Rust |
+| UI | Slint (ou egui/iced) |
+| Composição | `wgpu` + `cosmic-text`/`glyphon` |
+| Captura | `xcap`/`scap`, `nokhwa`, `cpal` (+ APIs por SO) |
+| Convidados | SDK Rust do LiveKit (ou `webrtc-rs`) |
+| Encode e fan-out | FFmpeg + MediaMTX |
+| Servidor de mídia | `livekit-server` (processo filho) |
+| i18n | `fluent` (ou gettext do Slint) |
+| Segredos | `keyring` |
 
-> Windows é o alvo primário. macOS e Linux ficam para depois. Ver [Stack](plano/componentes/stack.md).
+> Ver [Stack](plano/componentes/stack.md) e [Decisões](plano/decisoes.md).
 
 ## Roadmap
 
 | Fase | Objetivo |
 |---|---|
-| [Fase 0 — Spike](plano/roadmap/fase-0-spike.md) | Validar ingests, medir upload e decidir a via de saída (1 a 2 dias). |
-| [Fase 1 — MVP](plano/roadmap/fase-1-mvp.md) | App instalável com 1 convidado remoto e multistream 3×. |
+| [Fase 0 — Spike](plano/roadmap/fase-0-spike.md) | Provar o núcleo nativo (captura em Win+Linux, encode e upload). |
+| [Fase 1 — MVP](plano/roadmap/fase-1-mvp.md) | App Rust nativo, Windows e Linux, com 1 convidado remoto e multistream 3×. |
 | [Fase 2 — Redundância](plano/roadmap/fase-2-redundancia.md) | Failover ativo/standby entre os dois hosts. |
 | [Fase 3 — Recursos OBS-like](plano/roadmap/fase-3-recursos-obs.md) | Múltiplas cenas, transições, gravação local e mixer por fonte. |
 | [Fase 4 — Escala](plano/roadmap/fase-4-escala.md) | N convidados, overlays avançados e perfis de transmissão. |
@@ -71,7 +75,7 @@ MediaMTX local (rtmp://localhost/live)
 │   ├── decisoes.md
 │   ├── riscos.md
 │   ├── arquitetura/       # modelo, pipeline, salas, redundância, transporte
-│   ├── componentes/       # stack, sidecars e ingests
+│   ├── componentes/       # stack, UI, captura e composição, sidecars e ingests
 │   ├── roadmap/           # fases 0 a 4
 │   └── pendencias/        # spikes e questões em aberto
 └── .agents/               # skills locais do agente
@@ -90,10 +94,10 @@ O plano é mantido como um **Knowledge Bundle** no formato Open Knowledge Format
 
 Ainda não há código, então nada disso está em uso. Quando a Fase 1 começar, espera-se precisar de:
 
-- Windows 10/11 com WebView2
-- Rust e as dependências do Tauri v2
-- Node.js e/ou Bun para o frontend
-- Binários sidecar: FFmpeg, MediaMTX e LiveKit
+- Toolchain do **Rust** (Windows e Linux)
+- **FFmpeg** e **MediaMTX**
+- **LiveKit server** (`livekit-server`)
+- No Linux, servidor gráfico X11 ou Wayland (com PipeWire para captura)
 
 ## Como executar
 

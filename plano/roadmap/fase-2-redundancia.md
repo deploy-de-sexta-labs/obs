@@ -20,5 +20,5 @@ status: draft
 # Relationships
 
 - [Redundância ativo/standby](/arquitetura/redundancia-ativo-standby.md) — desenho detalhado.
-- [Decisões](/decisoes.md) — D5.
+- [Decisões](/decisoes.md) — D8.
 - [Fase 1 — MVP](/roadmap/fase-1-mvp.md) — fase anterior.

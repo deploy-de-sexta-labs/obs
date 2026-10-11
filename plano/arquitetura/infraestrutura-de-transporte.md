@@ -27,12 +27,12 @@ stale_after: 2026-11-30T23:59:59Z
 
 # Decisão adotada
 
-App **flexível**: funciona com SFU e TURN locais ou apontando para um relay externo (VPS mínimo ou gerenciado), mantendo composição e encode na máquina local.
+App **flexível**: funciona com SFU e TURN locais ou apontando para um relay externo (VPS mínimo ou gerenciado), mantendo captura, composição e encode na máquina local.
 
 Status: aguarda o [teste de CGNAT](/pendencias/teste-de-cgnat.md) para confirmar qual opção o host vai usar.
 
 # Relationships
 
 - [Riscos](/riscos.md) — R1.
-- [Decisões](/decisoes.md) — D2 e D7.
+- [Decisões](/decisoes.md) — D4 e D10.
 - [Teste de CGNAT](/pendencias/teste-de-cgnat.md) — pendência que define a escolha.

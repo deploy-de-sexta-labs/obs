@@ -30,5 +30,5 @@ Twitch, YouTube e Kick aceitam **um único publicador** por stream key. Por isso
 
 - [Fase 2 — Redundância](/roadmap/fase-2-redundancia.md) — implementação do failover.
 - [Ingests das plataformas](/componentes/ingests-das-plataformas.md) — restrição de publicador único.
-- [Decisões](/decisoes.md) — D5.
+- [Decisões](/decisoes.md) — D8.
 - [Pipeline de mídia](/arquitetura/pipeline-de-midia.md) — relay local como ponto de troca.

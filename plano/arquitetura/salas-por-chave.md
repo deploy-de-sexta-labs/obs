@@ -16,11 +16,12 @@ status: draft
 
 - O host abre a sessão, e o app gera ou usa um **room key**.
 - O `livekit-server` local emite **tokens JWT escopados à sala**: só quem tem a chave recebe token.
+- Convidados conectam a essa sala pelo **SDK Rust do LiveKit**, informando a chave.
 - **Chave = sala = isolamento total.** Outros podcasts usam o mesmo app, cada um com seu SFU e sua sala.
 - O segredo do `livekit-server` fica somente na máquina do host.
 
 # Relationships
 
-- [Decisões](/decisoes.md) — D6 define o convidado instalando o app e entrando com a chave.
+- [Decisões](/decisoes.md) — D9 define o convidado instalando o app e entrando com a chave.
 - [LiveKit server](/componentes/livekit-server.md) — emissor dos tokens.
 - [Modelo consolidado](/arquitetura/modelo-consolidado.md) — princípio de multi-tenant.

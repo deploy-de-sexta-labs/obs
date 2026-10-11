@@ -1,7 +1,7 @@
 ---
 type: Roadmap Phase
 title: "Fase 4 — Escala e polimento"
-description: "N convidados, overlays avançados via browser source e perfis de transmissão."
+description: "N convidados, overlays avançados renderizados nativamente e perfis de transmissão."
 tags: [roadmap, fase-4, escala]
 sources:
   - id: sessao-planejamento
@@ -15,10 +15,10 @@ status: draft
 # Entregas
 
 - N convidados.
-- Overlays avançados (browser source).
+- Overlays avançados (renderizados nativamente pelo compositor).
 - Perfis de transmissão.
 
 # Relationships
 
 - [Fase 3 — Recursos OBS-like](/roadmap/fase-3-recursos-obs.md) — fase anterior.
-- [Pipeline de mídia](/arquitetura/pipeline-de-midia.md) — base técnica.
+- [Captura e composição](/componentes/captura-e-composicao.md) — base dos overlays.

@@ -1,8 +1,8 @@
 ---
 type: Stack
 title: "Stack"
-description: "Tecnologias escolhidas por camada, com o motivo de cada uma: Tauri, React, WebView2, LiveKit, FFmpeg, MediaMTX, i18next e keychain."
-tags: [stack, tauri, react, webview2, i18n]
+description: "Tecnologias escolhidas por camada, 100% em Rust, para Windows e Linux: UI, composição, captura, WebRTC, encode e i18n."
+tags: [stack, rust, slint, wgpu, livekit, ffmpeg]
 sources:
   - id: sessao-planejamento
     resource: "Sessão de planejamento com o responsável pelo produto (2026-10)"
@@ -16,19 +16,21 @@ status: draft
 
 | Camada | Escolha | Por quê |
 |---|---|---|
-| Shell | **Tauri v2** (Rust) | App leve; backend Rust ideal para orquestrar binários sidecar. |
-| Frontend | **React + TypeScript + Tailwind** | Reaproveita o conhecimento do projeto; overlays em HTML/CSS. |
-| Webview | **WebView2** (Windows) | Chromium: WebRTC, `getDisplayMedia` e WebCodecs. |
-| Sidecars (geridos pelo Rust) | `ffmpeg`, `mediamtx`, `livekit-server` | Encode e fan-out, relay local e SFU. |
-| SDK de mídia | `livekit-client` (JS no webview) | Publicar e assinar tracks, salas e reconexão. |
-| Empacotamento | Tauri bundler (instalador Windows primeiro) | Gera `.msi` e `.exe`. |
-| i18n | **i18next** | PT-BR e EN. |
-| Segredos | **keychain do SO** | Stream keys nunca em texto puro. |
+| Linguagem | **Rust** | Requisito do projeto; núcleo de mídia de alta performance e cross-platform. |
+| UI | **Slint** (recomendado) ou **egui/iced** | 100% Rust, sem webview; roda em Windows e Linux. |
+| Composição | **`wgpu`** + `cosmic-text`/`glyphon` (+ `resvg`) | Compositor em GPU; D3D12/Vulkan no Windows e Vulkan no Linux. |
+| Captura | `xcap`/`scap` (tela), `nokhwa` (câmera), `cpal` + `wasapi`/`libpulse`/`pipewire` (áudio) | Captura nativa por sistema operacional. |
+| Convidados | **SDK Rust do LiveKit** (crate `livekit`) ou `webrtc-rs` | WebRTC em Rust, cross-platform. |
+| Encode e fan-out | **FFmpeg** (`ffmpeg-next` ou sidecar) + **MediaMTX** | Encode em GPU e distribuição por cópia. |
+| Servidor de mídia | `livekit-server` (processo filho) | Transporte dos participantes. |
+| i18n | `fluent` (ou gettext do Slint) | PT-BR e EN. |
+| Segredos | **`keyring`** | Stream keys no keychain do sistema operacional. |
 
-> Windows é o alvo primário. macOS e Linux ficam para depois, porque o WebView usa WebKit nessas plataformas, o que pode exigir fallbacks de captura.
+> **Windows e Linux são o alvo do MVP.** Sem Electron e sem webview — ver [Decisões](/decisoes.md).
 
 # Relationships
 
-- [Decisões](/decisoes.md) — D1 (Tauri, não Electron) e D9 (idioma).
-- [Riscos](/riscos.md) — R4 e R5.
-- [Sidecars](/componentes/index.md) — binários geridos pelo Rust.
+- [Decisões](/decisoes.md) — D1 (Rust), D2 (UI em Rust) e D12 (idioma).
+- [Captura e composição](/componentes/captura-e-composicao.md) — detalhes do núcleo nativo.
+- [UI](/componentes/ui.md) — detalhes da interface.
+- [Riscos](/riscos.md) — R2, R4 e R5.
