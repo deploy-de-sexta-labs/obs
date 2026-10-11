@@ -1,0 +1,58 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Build e artefatos de compilação
+dist/
+dist-ssr/
+build/
+out/
+
+# Tauri / Rust
+src-tauri/target/
+target/
+
+# Vite
+.vite/
+
+# Testes e cobertura
+coverage/
+*.lcov
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Caches
+.cache/
+.eslintcache
+*.tsbuildinfo
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores e IDEs
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Binários dos sidecars (ffmpeg, mediamtx, livekit) baixados em tempo de build
+# src-tauri/binaries/
